@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  mysql-standalone1:
+    image: mysql:5.7
+    environment:
+    - MYSQL_DATABASE=PostMan 
+    - MYSQL_ROOT_PASSWORD=root 
+    volumes:
+      - mysql-room:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    
+  springboot-docker-container:
+   image: springboot-docker-container
+   ports:
+     - 9090:9191
+   environment:
+      MYSQL_HOST: mysql-standalone1
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+   
+   build:
+     context: ./
+     dockerfile: Dockerfile
+   depends_on:
+     - mysql-standalone1    
+     
+volumes:
+ mysql-room:
+ 
